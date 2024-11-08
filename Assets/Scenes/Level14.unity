@@ -27709,7 +27709,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 43.9
-  orthographic: 0
+  orthographic: 1
   orthographic size: 9
   m_Depth: -1
   m_CullingMask:
@@ -27734,13 +27734,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2966609, y: -0.3458592, z: 0.11626008, w: 0.88252896}
-  m_LocalPosition: {x: 14, y: 18, z: -15}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 110, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1453307710}
-  m_LocalEulerAnglesHint: {x: 37.16, y: -42.8, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &964015654
 GameObject:
   m_ObjectHideFlags: 0
@@ -28083,7 +28083,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3eca186056c264dad9c9e858b6c10e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goals: []
 --- !u!1001 &986409487
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41451,7 +41450,7 @@ Transform:
   m_GameObject: {fileID: 1447371232}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalPosition: {x: 1, y: 0, z: -3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -51581,7 +51580,7 @@ Transform:
   m_GameObject: {fileID: 1898730477}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 9}
+  m_LocalPosition: {x: 1, y: 0, z: 6.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -53914,7 +53913,7 @@ Transform:
   m_GameObject: {fileID: 1968406448}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4, y: 0, z: 6}
+  m_LocalPosition: {x: 4, y: 0, z: 5.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -57099,7 +57098,7 @@ Transform:
   m_GameObject: {fileID: 2089486690}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -59000,11 +58999,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1961537402206697825, guid: 540dbe4fabb499b45830d45aef8eec60, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 1961537402206697825, guid: 540dbe4fabb499b45830d45aef8eec60, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6022042127840007121, guid: 540dbe4fabb499b45830d45aef8eec60, type: 3}
       propertyPath: goalLayer.m_Bits
