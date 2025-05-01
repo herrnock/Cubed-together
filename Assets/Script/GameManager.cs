@@ -1,22 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Szenen-übergreifender Singleton, der
+/// • Ziele (Goals) zählt,
+/// • Level-Complete auslöst,
+/// • Restart / Next-Level anstößt.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    private int totalGoals = 0;
-    private int activatedGoals = 0;
+    int totalGoals;        // Gesamtzahl der Ziele in der aktuellen Szene
+    int activatedGoals;    // Anzahl bereits aktivierter Ziele
 
-    private void Awake()
+    PauseMenuManager pauseUI;   // Cache für das UI in jeder Gameplay-Szene
+
+    //─────────────────────────────────────────────────────────────
+    #region Singleton + Scene-Hooks
+    void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            Debug.Log("GameManager initialisiert");
         }
         else
         {
@@ -24,52 +31,64 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void RegisterGoal()
-    {
-        totalGoals++;
-        Debug.Log("Total Goals: " + totalGoals);
-    }
+    void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
+    void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
 
-    public void GoalActivated()
+    /// <summary>Wird aufgerufen, sobald eine neue Szene fertig geladen ist.</summary>
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        activatedGoals++;
-        Debug.Log($"Ziel aktiviert. Aktivierte Ziele: {activatedGoals}");
-        CheckAllGoalsActivated();
-    }
+        // Zähler zurücksetzen (Goals registrieren sich danach in ihrem Start())
+        totalGoals = 0;
+        activatedGoals = 0;
 
-    public void GoalDeactivated()
-    {
-        activatedGoals--;
-        Debug.Log($"Ziel deaktiviert. Aktivierte Ziele: {activatedGoals}");
+        // Neues Pause-UI in dieser Szene suchen (kann in der MenuScene null sein)
+        pauseUI = FindObjectOfType<PauseMenuManager>();
     }
+    #endregion
 
-    private void CheckAllGoalsActivated()
+    //─────────────────────────────────────────────────────────────
+    #region Goal-Callbacks  (aufgerufen von Goal.cs)
+    public void RegisterGoal() => totalGoals++;
+    public void GoalActivated() { activatedGoals++; CheckGoals(); }
+    public void GoalDeactivated() => activatedGoals--;
+
+    void CheckGoals()
     {
-        Debug.Log($"�berpr�fen, ob alle Ziele aktiviert sind: {activatedGoals} / {totalGoals}");
-        if (activatedGoals == totalGoals)
+        if (totalGoals > 0 && activatedGoals == totalGoals)
         {
-            Debug.Log("Alle Ziele aktiviert! Level abgeschlossen!");
-            LoadNextLevel();
+            Debug.Log("Alle Ziele aktiviert → Level geschafft!");
+            if (pauseUI) pauseUI.ShowLevelComplete();   // Level-Complete-UI
+            else LoadNextLevel();               // Fallback (falls UI fehlt)
         }
+    }
+    #endregion
+
+    //─────────────────────────────────────────────────────────────
+    #region Öffentliche Flow-Methoden
+    public void RestartLevel()
+    {
+        // Sicherheitshalber Zeitfaktor zurücksetzen
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void LoadNextLevel()
     {
-        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
-        {
-            Debug.Log("N�chstes Level wird geladen: " + nextSceneIndex);
-            SceneManager.LoadScene(nextSceneIndex);
-        }
+        Time.timeScale = 1;
+        int next = SceneManager.GetActiveScene().buildIndex + 1;
+
+        if (next < SceneManager.sceneCountInBuildSettings)
+            SceneManager.LoadScene(next);
         else
-        {
-            Debug.Log("Keine weiteren Level zum Laden!");
-        }
+            SceneManager.LoadScene("Menu");   // oder Credits-Szene
     }
 
-    public void RestartLevel()
+    /// <summary>
+    /// Kann von Spiellogik aufgerufen werden, wenn der Spieler stirbt.
+    /// </summary>
+    public void TriggerGameOver()
     {
-        Debug.Log("Level wird neu gestartet: " + SceneManager.GetActiveScene().name);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (pauseUI) pauseUI.ShowGameOver();
     }
+    #endregion
 }
